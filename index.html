@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI 服务控制台 - 暗金主题</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* 暗金色主题背景 */
+  body {
+    font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2a1f 100%);
+    color: #e6d5a8;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* 暗金纹理背景 */
+  .texture-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(184, 148, 72, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(184, 148, 72, 0.03) 0%, transparent 50%),
+      repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(184, 148, 72, 0.02) 2px, rgba(184, 148, 72, 0.02) 4px);
+    z-index: -3;
+  }
+  
+  /* 动态粒子背景 */
+  #particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+  }
+  
+  /* 金色流光 */
+  .golden-stream {
+    position: fixed;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(184, 148, 72, 0.6) 20%,
+      rgba(212, 175, 55, 0.8) 50%,
+      rgba(184, 148, 72, 0.6) 80%,
+      transparent 100%);
+    z-index: -1;
+    opacity: 0.2;
+    filter: blur(1px);
+    animation: streamMove 25s linear infinite;
+  }
+  
+  .golden-stream:nth-child(1) {
+    top: 15%;
+    animation-delay: 0s;
+  }
+  
+  .golden-stream:nth-child(2) {
+    top: 45%;
+    animation-delay: 8s;
+  }
+  
+  .golden-stream:nth-child(3) {
+    top: 75%;
+    animation-delay: 16s;
+  }
+  
+  @keyframes streamMove {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* 密码验证容器 */
+  #auth-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+  }
+  
+  .auth-box {
+    background: rgba(30, 26, 18, 0.95);
+    border: 2px solid rgba(184, 148, 72, 0.3);
+    border-radius: 20px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.8),
+      0 0 50px rgba(212, 175, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    animation: authFloat 6s ease-in-out infinite;
+  }
+  
+  @keyframes authFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .auth-title {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #d4af37, #f7ef8a, #b89448);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+  
+  .auth-subtitle {
+    font-size: 16px;
+    color: #b8a05a;
+    margin-bottom: 40px;
+    opacity: 0.9;
+  }
+  
+  .password-input {
+    width: 100%;
+    padding: 18px 20px;
+    margin-bottom: 25px;
+    background: rgba(20, 18, 14, 0.8);
+    border: 1px solid rgba(184, 148, 72, 0.4);
+    border-radius: 12px;
+    font-size: 16px;
+    color: #f7ef8a;
+    transition: all 0.3s;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  
+  .password-input:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    background: rgba(25, 22, 16, 0.9);
+  }
+  
+  .password-input::placeholder {
+    color: #8b7355;
+  }
+  
+  .auth-button {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #d4af37, #b89448);
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .auth-button:hover {
+    background: linear-gradient(135deg, #f7ef8a, #d4af37);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+  }
+  
+  .auth-button:active {
+    transform: translateY(0);
+  }
+  
+  .auth-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .auth-button:hover::after {
+    opacity: 1;
+  }
+  
+  .error-message {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-top: 15px;
+    min-height: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+  }
+  
+  .error-message.show {
+    opacity: 1;
+  }
+  
+  .auth-footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #8b7355;
+    opacity: 0.7;
+  }
+  
+  /* 主容器 */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: none; /* 初始隐藏 */
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+  }
+  
+  .title {
+    font-size: 42px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #d4af37, #f7ef8a, #b89448);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  }
+  
+  .subtitle {
+    font-size: 18px;
+    color: #b8a05a;
+    opacity: 0.9;
+    margin-top: 20px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+  
+  /* 卡片容器 - 确保菜单有足够空间 */
+  .card-container {
+    position: relative;
+    min-height: 160px; /* 为菜单留出空间 */
+  }
+  
+  /* 暗金色卡片 */
+  .card {
+    background: rgba(40, 35, 25, 0.8);
+    border: 1px solid rgba(184, 148, 72, 0.3);
+    border-radius: 12px;
+    padding: 25px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: visible;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    z-index: 2;
+    height: 100%;
+  }
+  
+  /* 卡片金色边框 */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(45deg, #d4af37, #f7ef8a, #b89448);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+  }
+  
+  .card.active {
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 
+      0 15px 40px rgba(212, 175, 55, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .card.active::before {
+    opacity: 1;
+  }
+  
+  /* 卡片内部发光效果 */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .card:hover::after,
+  .card.active::after {
+    opacity: 0.3;
+  }
+  
+  .card h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #f7ef8a;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .card p {
+    font-size: 14px;
+    color: #d4c690;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* 角标样式 - 金色主题 */
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+    background: linear-gradient(45deg, #d4af37, #f7ef8a);
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+    animation: goldPulse 2s infinite;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .badge.hot {
+    background: linear-gradient(45deg, #d4af37, #ff8e53);
+  }
+  
+  .badge.new {
+    background: linear-gradient(45deg, #b89448, #f7ef8a);
+  }
+  
+  .badge.beta {
+    background: linear-gradient(45deg, #d4af37, #f7d154);
+  }
+  
+  .badge.ai {
+    background: linear-gradient(45deg, #b89448, #e6d5a8);
+  }
+  
+  @keyframes goldPulse {
+    0%, 100% { 
+      transform: scale(1);
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+    }
+    50% { 
+      transform: scale(1.05);
+      box-shadow: 0 2px 20px rgba(212, 175, 55, 0.5);
+    }
+  }
+  
+  /* 下拉菜单样式 - 固定在卡片下方 */
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 5px); /* 在卡片下方5px */
+    left: 0;
+    right: 0;
+    background: rgba(30, 26, 18, 0.98);
+    border-radius: 10px;
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(184, 148, 72, 0.4);
+    box-shadow: 
+      0 15px 40px rgba(0, 0, 0, 0.6),
+      0 0 25px rgba(212, 175, 55, 0.2);
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+  }
+  
+  .dropdown-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  
+  .dropdown-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    color: #e6d5a8;
+    display: block;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+  }
+  
+  .dropdown-item:hover {
+    background: rgba(212, 175, 55, 0.15);
+    color: #f7ef8a;
+    padding-left: 25px;
+  }
+  
+  .dropdown-item::before {
+    content: '▶';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #d4af37;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .dropdown-item:hover::before {
+    opacity: 1;
+  }
+  
+  /* 下拉箭头 */
+  .dropdown-arrow {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    color: #b89448;
+    font-size: 10px;
+    opacity: 0.7;
+    transition: all 0.3s;
+  }
+  
+  .card.active .dropdown-arrow {
+    opacity: 1;
+    transform: rotate(180deg);
+    color: #d4af37;
+  }
+  
+  /* 状态指示灯 */
+  .status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background: #b89448;
+    box-shadow: 0 0 10px #b89448;
+    animation: statusPulse 2s infinite;
+  }
+  
+  .status-indicator.online {
+    background: #d4af37;
+    box-shadow: 0 0 10px #d4af37;
+  }
+  
+  .status-indicator.offline {
+    background: #8b7355;
+    box-shadow: 0 0 10px #8b7355;
+  }
+  
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .title {
+      font-size: 32px;
+    }
+    
+    .container {
+      padding: 20px 15px;
+    }
+    
+    .dropdown-menu {
+      position: fixed;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      top: auto;
+      transform: translateY(20px) scale(0.95);
+    }
+    
+    .dropdown-menu.active {
+      transform: translateY(0) scale(1);
+    }
+    
+    .auth-box {
+      padding: 30px 20px;
+      margin: 20px;
+    }
+    
+    .auth-title {
+      font-size: 28px;
+    }
+  }
+  
+  /* 浮动动画 */
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(0.5deg); }
+  }
+  
+  .card {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.1s);
+  }
+  
+  /* 控制台版本信息 */
+  .version {
+    text-align: center;
+    margin-top: 50px;
+    color: rgba(184, 148, 72, 0.5);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  
+  /* 关闭其他菜单的提示 */
+  .menu-hint {
+    text-align: center;
+    margin-top: 30px;
+    color: #b89448;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+  
+  /* 退出按钮 */
+  .logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 20px;
+    background: rgba(30, 26, 18, 0.8);
+    border: 1px solid rgba(184, 148, 72, 0.3);
+    border-radius: 20px;
+    color: #b8a05a;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+    display: none;
+  }
+  
+  .logout-button:hover {
+    background: rgba(40, 35, 25, 0.9);
+    border-color: rgba(212, 175, 55, 0.5);
+    color: #f7ef8a;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+  }
+</style>
+</head>
+<body>
+
+<!-- 密码验证界面 -->
+<div id="auth-container">
+  <div class="auth-box">
+    <div class="auth-title">🔐 皇家AI控制台</div>
+    <div class="auth-subtitle">请输入访问密码以进入皇家AI服务控制台</div>
+    
+    <input type="password" id="password-input" class="password-input" placeholder="请输入访问密码" autocomplete="off" autofocus>
+    <button id="auth-button" class="auth-button">🚪 进入控制台</button>
+    
+    <div id="error-message" class="error-message"></div>
+    
+    <div class="auth-footer">
+      🛡️ 皇家级安全认证 · 仅限授权访问
+    </div>
+  </div>
+</div>
+
+<!-- 背景元素 -->
+<div class="texture-bg"></div>
+<canvas id="particles"></canvas>
+<div class="golden-stream"></div>
+<div class="golden-stream"></div>
+<div class="golden-stream"></div>
+
+<!-- 主控制台界面 -->
+<div class="container">
+  <button class="logout-button" id="logout-button">👑 退出皇家控制台</button>
+  
+  <div class="header">
+    <h1 class="title">皇家AI控制台</h1>
+    <p class="subtitle">暗金主题 · 皇家级管理平台</p>
+  </div>
+  
+  <div class="grid" id="app">
+    <!-- 按钮将通过JavaScript动态生成 -->
+  </div>
+  
+  <div class="menu-hint">💡 提示：单击卡片展开菜单，点击其他地方或再次点击卡片关闭</div>
+  
+  <div class="version">
+    Imperial Console v3.0 | 皇家暗金主题版 | 安全访问系统
+  </div>
+</div>
+
+<script>
+// ==================================================
+// 【配置区】- 仅需修改这里，无需动任何代码
+// ==================================================
+
+const CONFIG = {
+  // 访问密码（请修改为您自己的密码）
+  accessPassword: "royal2024",
+  
+  // 所有按钮配置（每个按钮都有下拉菜单）
+  buttons: [
+    {
+      name: "👑 Dify AI",
+      desc: "工作流与Agent智能编排平台",
+      badge: "热门",
+      badgeType: "hot",
+      status: "online",
+      items: [
+        { name: "🏰 主控制台", url: "http://127.0.0.1:8000" },
+        { name: "📊 数据分析", url: "http://127.0.0.1:8000/analytics" },
+        { name: "⚙️ 设置管理", url: "http://127.0.0.1:8000/settings" },
+        { name: "📋 任务队列", url: "http://127.0.0.1:8000/tasks" }
+      ]
+    },
+    {
+      name: "📚 RAGFlow",
+      desc: "文档智能解析与检索增强",
+      badge: "新版",
+      badgeType: "new",
+      status: "online",
+      items: [
+        { name: "📜 文档管理", url: "http://127.0.0.1:7001" },
+        { name: "🔍 高级搜索", url: "http://127.0.0.1:7001/search" },
+        { name: "⚒️ 分块配置", url: "http://127.0.0.1:7001/chunks" },
+        { name: "🎛️ 模型设置", url: "http://127.0.0.1:7001/models" }
+      ]
+    },
+    {
+      name: "🧠 Ollama",
+      desc: "本地大模型部署与管理",
+      badge: "AI",
+      badgeType: "ai",
+      status: "online",
+      items: [
+        { name: "🗄️ 模型库", url: "http://127.0.0.1:3000" },
+        { name: "🔗 API接口", url: "http://127.0.0.1:3000/api" },
+        { name: "📈 性能监控", url: "http://127.0.0.1:3000/monitor" },
+        { name: "⚙️ 配置管理", url: "http://127.0.0.1:3000/config" }
+      ]
+    },
+    {
+      name: "🗣️ TTS 引擎",
+      desc: "智能语音合成服务",
+      badge: "新版",
+      badgeType: "new",
+      status: "online",
+      items: [
+        { name: "🎤 语音合成", url: "http://127.0.0.1:9999" },
+        { name: "🎭 声音库", url: "http://127.0.0.1:9999/voices" },
+        { name: "🎛️ 参数调整", url: "http://127.0.0.1:9999/settings" },
+        { name: "📊 使用统计", url: "http://127.0.0.1:9999/stats" }
+      ]
+    },
+    {
+      name: "👂 Whisper",
+      desc: "语音转文字服务",
+      badge: "测试",
+      badgeType: "beta",
+      status: "offline",
+      items: [
+        { name: "🎙️ 实时转录", url: "http://127.0.0.1:8888" },
+        { name: "📁 文件处理", url: "http://127.0.0.1:8888/files" },
+        { name: "🤖 模型选择", url: "http://127.0.0.1:8888/models" },
+        { name: "📜 转录历史", url: "http://127.0.0.1:8888/history" }
+      ]
+    },
+    {
+      name: "🔧 MaxKB",
+      desc: "知识库与智能体管理",
+      badge: "",
+      badgeType: "",
+      status: "online",
+      items: [
+        { name: "🖥️ 管理后台", url: "http://127.0.0.1:8080" },
+        { name: "📄 合同审查", url: "http://127.0.0.1:8080/chat/7d35bd6554f36ce2" },
+        { name: "📊 数据分析", url: "http://127.0.0.1:8080/chat/8e46ce7565d47f31" },
+        { name: "💼 业务咨询", url: "http://127.0.0.1:8080/chat/9f57de8675e58f42" }
+      ]
+    },
+    {
+      name: "🌐 WebUI",
+      desc: "Web用户界面服务",
+      badge: "",
+      badgeType: "",
+      status: "online",
+      items: [
+        { name: "🎨 图像生成", url: "http://127.0.0.1:7860" },
+        { name: "📝 文本处理", url: "http://127.0.0.1:7861" },
+        { name: "✨ 风格转换", url: "http://127.0.0.1:7862" },
+        { name: "⚙️ 系统设置", url: "http://127.0.0.1:7860/settings" }
+      ]
+    },
+    {
+      name: "📡 API Gateway",
+      desc: "统一API接口网关",
+      badge: "热门",
+      badgeType: "hot",
+      status: "online",
+      items: [
+        { name: "🚪 网关入口", url: "http://127.0.0.1:8081" },
+        { name: "📊 流量监控", url: "http://127.0.0.1:8081/monitor" },
+        { name: "🔑 密钥管理", url: "http://127.0.0.1:8081/keys" },
+        { name: "📈 性能分析", url: "http://127.0.0.1:8081/analytics" }
+      ]
+    }
+  ],
+  
+  // 粒子背景配置
+  particles: {
+    count: 120,
+    speed: 0.3,
+    size: 1.5,
+    color: "#d4af37"
+  }
+};
+
+// ==============================
+// 下面的代码不要动！
+// ==============================
+
+// 粒子背景动画 - 金色主题
+(function() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let width, height;
+  
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  
+  function createParticles() {
+    particles = [];
+    for (let i = 0; i < CONFIG.particles.count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * CONFIG.particles.size + 0.5,
+        speedX: (Math.random() - 0.5) * CONFIG.particles.speed,
+        speedY: (Math.random() - 0.5) * CONFIG.particles.speed,
+        opacity: Math.random() * 0.3 + 0.1
+      });
+    }
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    
+    particles.forEach(p => {
+      p.x += p.speedX;
+      p.y += p.speedY;
+      
+      if (p.x < 0 || p.x > width) p.speedX = -p.speedX;
+      if (p.y < 0 || p.y > height) p.speedY = -p.speedY;
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
+      ctx.fill();
+      
+      // 绘制金色粒子间的连接线
+      particles.forEach(p2 => {
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 80) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(212, 175, 55, ${0.08 * (1 - distance/80)})`;
+          ctx.lineWidth = 0.3;
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      });
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  window.addEventListener('resize', () => {
+    resize();
+    createParticles();
+  });
+  
+  resize();
+  createParticles();
+  animate();
+})();
+
+// 菜单管理器
+class MenuManager {
+  constructor() {
+    this.currentOpenMenu = null;
+    this.init();
+  }
+  
+  init() {
+    // 点击页面其他地方关闭菜单
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.card-container') && !e.target.closest('.dropdown-menu')) {
+        this.closeAllMenus();
+      }
+    });
+    
+    // ESC键关闭菜单
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeAllMenus();
+      }
+    });
+  }
+  
+  openMenu(menuId) {
+    // 如果已经有打开的菜单，先关闭它
+    if (this.currentOpenMenu && this.currentOpenMenu !== menuId) {
+      this.closeMenu(this.currentOpenMenu);
+    }
+    
+    // 打开新菜单
+    const card = document.querySelector(`[data-menu-id="${menuId}"]`);
+    const menu = document.querySelector(`[data-menu="${menuId}"]`);
+    
+    if (card && menu) {
+      card.classList.add('active');
+      menu.classList.add('active');
+      this.currentOpenMenu = menuId;
+    }
+  }
+  
+  closeMenu(menuId) {
+    const card = document.querySelector(`[data-menu-id="${menuId}"]`);
+    const menu = document.querySelector(`[data-menu="${menuId}"]`);
+    
+    if (card) card.classList.remove('active');
+    if (menu) menu.classList.remove('active');
+    
+    if (this.currentOpenMenu === menuId) {
+      this.currentOpenMenu = null;
+    }
+  }
+  
+  closeAllMenus() {
+    document.querySelectorAll('.card.active').forEach(card => {
+      card.classList.remove('active');
+    });
+    
+    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+      menu.classList.remove('active');
+    });
+    
+    this.currentOpenMenu = null;
+  }
+  
+  toggleMenu(menuId) {
+    if (this.currentOpenMenu === menuId) {
+      this.closeMenu(menuId);
+    } else {
+      this.openMenu(menuId);
+    }
+  }
+}
+
+// 密码验证功能
+document.addEventListener('DOMContentLoaded', function() {
+  // DOM元素
+  const authContainer = document.getElementById('auth-container');
+  const mainContainer = document.querySelector('.container');
+  const passwordInput = document.getElementById('password-input');
+  const authButton = document.getElementById('auth-button');
+  const errorMessage = document.getElementById('error-message');
+  const logoutButton = document.getElementById('logout-button');
+  const app = document.getElementById('app');
+  
+  // 初始化菜单管理器
+  const menuManager = new MenuManager();
+  
+  // 密码输入框回车键支持
+  passwordInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      authenticate();
+    }
+  });
+  
+  // 验证按钮点击事件
+  authButton.addEventListener('click', authenticate);
+  
+  // 退出登录按钮
+  logoutButton.addEventListener('click', function() {
+    // 隐藏主控制台
+    mainContainer.style.display = 'none';
+    logoutButton.style.display = 'none';
+    
+    // 显示验证界面
+    authContainer.style.display = 'flex';
+    
+    // 清空密码和错误信息
+    passwordInput.value = '';
+    errorMessage.textContent = '';
+    errorMessage.classList.remove('show');
+    
+    // 清除控制台内容
+    app.innerHTML = '';
+    
+    // 重置输入焦点
+    passwordInput.focus();
+    
+    console.log('👑 已退出皇家控制台');
+  });
+  
+  function authenticate() {
+    const password = passwordInput.value.trim();
+    
+    if (!password) {
+      showError('请输入访问密码');
+      return;
+    }
+    
+    // 密码验证逻辑
+    if (password === CONFIG.accessPassword) {
+      // 密码正确
+      authContainer.style.display = 'none';
+      mainContainer.style.display = 'block';
+      logoutButton.style.display = 'block';
+      
+      // 渲染控制台内容
+      renderConsole();
+      
+      // 清除错误消息
+      errorMessage.textContent = '';
+      errorMessage.classList.remove('show');
+      
+      console.log('✅ 皇家级密码验证通过，进入AI控制台');
+      
+      // 播放成功音效（如果浏览器支持）
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(880, audioContext.currentTime); // A5
+        oscillator.frequency.setValueAtTime(1046.50, audioContext.currentTime + 0.1); // C6
+        oscillator.frequency.setValueAtTime(1318.51, audioContext.currentTime + 0.2); // E6
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      } catch (e) {
+        // 音频上下文不可用，静默失败
+      }
+    } else {
+      showError('密码错误，请重新输入');
+      passwordInput.value = '';
+      passwordInput.focus();
+      
+      // 播放错误音效
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(220, audioContext.currentTime); // A3
+        oscillator.frequency.setValueAtTime(196.00, audioContext.currentTime + 0.1); // G3
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+      } catch (e) {
+        // 音频上下文不可用，静默失败
+      }
+    }
+  }
+  
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.add('show');
+    
+    // 3秒后自动隐藏错误消息
+    setTimeout(() => {
+      errorMessage.classList.remove('show');
+    }, 3000);
+  }
+  
+  // 渲染控制台内容
+  function renderConsole() {
+    CONFIG.buttons.forEach((button, index) => {
+      // 创建卡片容器
+      const cardContainer = document.createElement('div');
+      cardContainer.className = 'card-container';
+      
+      // 创建卡片
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.setProperty('--i', index);
+      card.dataset.menuId = `menu-${index}`;
+      
+      // 生成菜单项HTML
+      let menuItems = '';
+      button.items.forEach(item => {
+        menuItems += `
+          <a href="${item.url}" target="_blank" class="dropdown-item">
+            ${item.name}
+          </a>
+        `;
+      });
+      
+      // 状态指示灯
+      const statusClass = button.status === 'online' ? 'online' : 'offline';
+      const statusText = button.status === 'online' ? '在线' : '离线';
+      
+      // 角标
+      let badgeHtml = '';
+      if (button.badge) {
+        badgeHtml = `<span class="badge ${button.badgeType}">${button.badge}</span>`;
+      }
+      
+      // 卡片内容
+      card.innerHTML = `
+        <h3>
+          <span class="status-indicator ${statusClass}" title="${statusText}"></span>
+          ${button.name}
+          ${badgeHtml}
+        </h3>
+        <p>${button.desc}</p>
+        <div class="dropdown-arrow">▼</div>
+      `;
+      
+      // 创建下拉菜单
+      const dropdownMenu = document.createElement('div');
+      dropdownMenu.className = 'dropdown-menu';
+      dropdownMenu.dataset.menu = `menu-${index}`;
+      dropdownMenu.innerHTML = menuItems;
+      
+      // 如果是离线状态，添加禁用样式
+      if (button.status === 'offline') {
+        card.style.opacity = '0.6';
+        card.style.cursor = 'not-allowed';
+        
+        // 禁用所有菜单项
+        dropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+          item.style.pointerEvents = 'none';
+          item.style.opacity = '0.4';
+        });
+      } else {
+        // 添加点击事件
+        card.addEventListener('click', (e) => {
+          e.stopPropagation(); // 阻止事件冒泡
+          menuManager.toggleMenu(`menu-${index}`);
+        });
+      }
+      
+      // 将卡片和菜单添加到容器
+      cardContainer.appendChild(card);
+      cardContainer.appendChild(dropdownMenu);
+      app.appendChild(cardContainer);
+    });
+    
+    // 控制台欢迎信息
+    console.log(`
+%c👑 皇家AI控制台已解锁 👑
+%c
+主题: 皇家暗金色
+服务数量: ${CONFIG.buttons.length}个
+访问时间: ${new Date().toLocaleString()}
+安全级别: 皇家级
+
+%c💡 提示: 单击卡片展开菜单，点击其他地方关闭
+`, 
+'color: #d4af37; font-size: 18px; font-weight: bold; text-shadow: 0 0 15px #d4af37;',
+'color: #b89448; font-size: 12px;',
+'color: #f7ef8a; font-size: 12px;'
+    );
+  }
+  
+  // 初始焦点设置
+  passwordInput.focus();
+  
+  console.log("🔐 皇家AI控制台已加载，等待密码验证...");
+  console.log(`💡 提示：默认密码是 "${CONFIG.accessPassword}"，请在配置区修改为您自己的密码`);
+});
+</script>
+
+</body>
+</html>
